@@ -1,6 +1,5 @@
 import argparse
 from aocd import get_data
-import os
 import pathlib
 
 
