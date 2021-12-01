@@ -9,7 +9,19 @@ def parse(data) -> list[int]:
     return list(map(int, data.split('\n')))
 
 
+def solve(data, window=2):
+    return sum(curr > prev for prev, curr in zip(data, data[window-1:]))
+
+
 def part_a(data):
+    return solve(data, 2)
+
+
+def part_b(data):
+    return solve(data, 4)
+
+
+def _part_a(data):
     n = len(data)
     if n < 2:
         return 0
@@ -23,7 +35,7 @@ def part_a(data):
     return count
 
 
-def part_b(data):
+def _part_b(data):
     n = len(data)
     if n < 4:
         return 0
