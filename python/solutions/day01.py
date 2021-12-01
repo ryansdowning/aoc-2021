@@ -32,8 +32,8 @@ def part_b(data):
     a, b, c = data[:3]
     total = a + b + c
     for num in data[3:]:
+        new_total = total - a + num
         a, b, c = b, c, num
-        new_total = a + b + c
         if new_total > total:
             count += 1
         total = new_total
