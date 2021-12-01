@@ -6,11 +6,11 @@ from . import utils
 
 
 def parse(data) -> list[int]:
-    return list(map(int, data.split('\n')))
+    return list(map(int, data.split("\n")))
 
 
 def solve(data, window=2):
-    return sum(curr > prev for prev, curr in zip(data, data[window-1:]))
+    return sum(curr > prev for prev, curr in zip(data, data[window - 1 :]))
 
 
 def part_a(data):
@@ -53,7 +53,7 @@ def _part_b(data):
 
 
 if __name__ == "__main__":
-    with open("/home/ryan/Desktop/repos/aoc/aoc-2021/python/solutions/../../inputs/day01.txt", 'r') as fp:
+    with open("/home/ryan/Desktop/repos/aoc/aoc-2021/python/solutions/../../inputs/day01.txt", "r") as fp:
         data = fp.read()
 
     data = parse(data)

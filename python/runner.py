@@ -1,15 +1,15 @@
+import argparse
 import glob
-from pathlib import Path
+import statistics
 from functools import partial
 from importlib import import_module
-import statistics
-import argparse
+from pathlib import Path
 
 from solutions import utils
 
 parser = argparse.ArgumentParser()
-parser.add_argument('--days', '-d', type=int, nargs='*')
-parser.add_argument('--verbose', '-v', action='count', default=1)
+parser.add_argument("--days", "-d", type=int, nargs="*")
+parser.add_argument("--verbose", "-v", action="count", default=1)
 
 YEAR = 2021
 PKG_NAME = "solutions"
@@ -33,7 +33,7 @@ if __name__ == "__main__":
             continue
         print(f"Running day {day}")
 
-        with open(INPUTS_PATH / f"{stem}.txt", 'r') as fp:
+        with open(INPUTS_PATH / f"{stem}.txt", "r") as fp:
             time, runs, data = utils.timeit(fp.read)
         print(utils.format_results("Reading", time, runs, verbose=verbose))
 

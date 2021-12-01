@@ -1,7 +1,7 @@
 import math
+from statistics import quantiles, stdev
 from time import perf_counter
-from statistics import stdev, quantiles
-from typing import Callable, Any
+from typing import Any, Callable
 
 
 def format_time(seconds: float) -> str:
@@ -27,7 +27,7 @@ def timeit(func: Callable[[], Any], max_time=15) -> tuple[float, list[float], An
     runs.append(total_elapsed)
 
     est_runs = max_time // total_elapsed
-    est_runs = 10**(math.floor(math.log10(est_runs))) - 1
+    est_runs = 10 ** (math.floor(math.log10(est_runs))) - 1
 
     for _ in range(est_runs):
         start = perf_counter()
@@ -56,8 +56,10 @@ def format_results(name, total_elapsed, runs, result=None, verbose=2):
 
     low, high = min(runs), max(runs)
     low_o, *_, high_o = quantiles(runs, n=100)
-    line2 = f"min: {format_time(low):>5}, max: {format_time(high):>5}, " \
-            f"1%: {format_time(high_o):>5}, 99%: {format_time(low_o):>5}"
+    line2 = (
+        f"min: {format_time(low):>5}, max: {format_time(high):>5}, "
+        f"1%: {format_time(high_o):>5}, 99%: {format_time(low_o):>5}"
+    )
     if verbose == 2:
         return f"{line1}\n{line2}"
 

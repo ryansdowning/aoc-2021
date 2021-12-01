@@ -19,20 +19,20 @@ def str_to_file(path: str) -> pathlib.Path:
 
 
 parser = argparse.ArgumentParser()
-parser.add_argument('--year', '-y', type=int, help="year of the advent-of-code challenge", required=True)
-parser.add_argument('--day', '-d', type=int, help="day of the advent-of-code challenge", required=True)
+parser.add_argument("--year", "-y", type=int, help="year of the advent-of-code challenge", required=True)
+parser.add_argument("--day", "-d", type=int, help="day of the advent-of-code challenge", required=True)
 parser.add_argument(
-    '--inputs-path',
-    '-i',
+    "--inputs-path",
+    "-i",
     type=str_to_dir,
     default=pathlib.Path(__file__).parent.resolve() / "../../inputs",
-    help="Path to directory to store inputs"
+    help="Path to directory to store inputs",
 )
 parser.add_argument(
-    '--solution-path',
-    '-s',
+    "--solution-path",
+    "-s",
     type=str_to_file,
-    help="Path of file to create for the challenge's solution. If not provided, day_<day>.py will be used as default."
+    help="Path of file to create for the challenge's solution. If not provided, day_<day>.py will be used as default.",
 )
 
 if __name__ == "__main__":
@@ -49,7 +49,7 @@ if __name__ == "__main__":
 
     data = get_data(day=args.day, year=args.year)
     inputs_path = args.inputs_path / f"day{args.day:02d}.txt"
-    with open(inputs_path, 'w') as fp:
+    with open(inputs_path, "w") as fp:
         fp.write(data)
 
     solution_template = f"""import time
@@ -98,4 +98,3 @@ if __name__ == "__main__":
     submit(solution_b, part="b", day={args.day}, year={args.year})
 """
     default_solution_path.write_text(solution_template)
-
