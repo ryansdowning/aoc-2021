@@ -1,3 +1,4 @@
+import math
 from time import perf_counter
 from typing import Callable, Any
 
@@ -14,15 +15,27 @@ def format_time(seconds: float) -> str:
     return str(seconds)
 
 
-def timeit(func: Callable[[], Any]) -> tuple[float, list[float], Any]:
+def timeit(func: Callable[[], Any], max_time=15) -> tuple[float, list[float], Any]:
     runs = []
 
     start = perf_counter()
     result = func()
     end = perf_counter()
 
-    total_elapsed = start - end
+    total_elapsed = end - start
     runs.append(total_elapsed)
+
+    est_runs = max_time // total_elapsed
+    est_runs = 10**(math.floor(math.log10(est_runs))) - 1
+
+    for _ in range(est_runs):
+        start = perf_counter()
+        func()
+        end = perf_counter()
+        elapsed = end - start
+
+        runs.append(elapsed)
+        total_elapsed += elapsed
 
     return total_elapsed, runs, result
 

@@ -2,7 +2,7 @@ import time
 
 from aocd import submit
 
-import utils
+from . import utils
 
 
 def parse(data) -> list[int]:
