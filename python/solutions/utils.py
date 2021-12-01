@@ -64,4 +64,4 @@ def format_results(name, total_elapsed, runs, result=None, verbose=2):
         return f"{line1}\n{line2}"
 
     results_str = f"Result: {result}\n" if result is not None else ""
-    return f"{results_str}\n{line1}\n{line2}"
+    return f"{results_str}{line1}\n{line2}"
