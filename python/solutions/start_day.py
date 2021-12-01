@@ -1,6 +1,7 @@
 import argparse
-from aocd import get_data
 import pathlib
+
+from aocd import get_data
 
 
 def str_to_dir(path: str) -> pathlib.Path:
@@ -51,7 +52,15 @@ if __name__ == "__main__":
     with open(inputs_path, 'w') as fp:
         fp.write(data)
 
-    solution_template = f"""from aocd import submit
+    solution_template = f"""import time
+
+from aocd import submit
+
+import utils
+
+
+def parse(data):
+    pass
 
 
 def part_a(data):
@@ -65,8 +74,28 @@ def part_b(data):
 if __name__ == "__main__":
     with open("{inputs_path}", 'r') as fp:
         data = fp.read()
-    submit(part_a(data), part="a", day={args.day}, year={args.year})
-    submit(part_b(data), part="b", day={args.day}, year={args.year})
+
+    data =  parse(data)
+
+    print("Running day {args.day} part A")
+    start_a = time.perf_counter()
+
+    solution_a = part_a(data)
+
+    stop_a = time.perf_counter()
+    elapsed_a = stop_a - start_a
+    print(f"Part A finished in {{utils.format_time(elapsed_a)}} with solution: {{solution_a}}, submitting...")
+    submit(solution_a, part="a", day={args.day}, year={args.year})
+
+    print("Running day {args.day} part B")
+    start_b = time.perf_counter()
+
+    solution_b = part_b(data)
+
+    stop_b = time.perf_counter()
+    elapsed_b = stop_b - start_b
+    print(f"Part B finished in {{utils.format_time(elapsed_b)}} with solution: {{solution_b}}, submitting...")
+    submit(solution_b, part="b", day={args.day}, year={args.year})
 """
     default_solution_path.write_text(solution_template)
 
