@@ -1,6 +1,8 @@
 import time
 
 from aocd import submit
+import pandas as pd
+import numpy as np
 
 from . import utils
 
@@ -9,18 +11,32 @@ def parse(data) -> list[int]:
     return list(map(int, data.split("\n")))
 
 
-def solve(data, window=2):
-    return sum(curr > prev for prev, curr in zip(data, data[window - 1 :]))
+def solve_numpy(data, window=1):
+    # cast list to np.ndarray in the parse function if using
+    return (data[window:] > data[:-window]).sum()
 
 
+def solve_pandas(data, window=1):
+    # cast list to pd.Series in parse function if using
+    return (data > data.shift(window)).sum()
+
+
+# O(n) time, no extra space
+def solve(data, window=1):
+    return sum(curr > prev for prev, curr in zip(data, data[window:]))
+
+
+# O(n) time, no extra space
 def part_a(data):
-    return solve(data, 2)
+    return solve(data, 1)
 
 
+# O(n) time, no extra space
 def part_b(data):
-    return solve(data, 4)
+    return solve(data, 3)
 
 
+# O(n) time, O(1) space, O(n * window) swaps
 def _part_a(data):
     n = len(data)
     if n < 2:
@@ -35,6 +51,7 @@ def _part_a(data):
     return count
 
 
+# O(n) time, O(1) space, O(n * window) swaps
 def _part_b(data):
     n = len(data)
     if n < 4:
