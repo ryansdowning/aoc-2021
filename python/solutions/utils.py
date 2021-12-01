@@ -1,5 +1,6 @@
 import math
 from time import perf_counter
+from statistics import stdev, quantiles
 from typing import Callable, Any
 
 
@@ -39,3 +40,26 @@ def timeit(func: Callable[[], Any], max_time=15) -> tuple[float, list[float], An
 
     return total_elapsed, runs, result
 
+
+def format_results(name, total_elapsed, runs, result=None, verbose=2):
+    if verbose == 0:
+        return ""
+
+    n = len(runs)
+    mu = total_elapsed / n
+    std = stdev(runs)
+    name = f"{name}:"
+    line1 = f"{name:<8}{format_time(mu):>8} ± {format_time(std):<8} per loop (mean ± std. dev. of {n} loops)"
+
+    if verbose == 1:
+        return line1
+
+    low, high = min(runs), max(runs)
+    low_o, *_, high_o = quantiles(runs, n=100)
+    line2 = f"min: {format_time(low):>5}, max: {format_time(high):>5}, " \
+            f"1%: {format_time(high_o):>5}, 99%: {format_time(low_o):>5}"
+    if verbose == 2:
+        return f"{line1}\n{line2}"
+
+    results_str = f"Result: {result}\n" if result is not None else ""
+    return f"{results_str}\n{line1}\n{line2}"
