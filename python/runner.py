@@ -20,6 +20,7 @@ MODULES = {}
 for file in glob.glob(SOLUTION_PATTERN):
     stem = Path(file).stem
     MODULES[stem] = import_module(f"{PKG_NAME}.{stem}", PKG_NAME)
+MODULES = sorted(((stem, module) for stem, module in MODULES.items()), key=lambda x: x[0])
 
 if __name__ == "__main__":
     args = parser.parse_args()
@@ -27,7 +28,7 @@ if __name__ == "__main__":
     verbose = args.verbose
     print(f"Starting runner for {YEAR}")
 
-    for stem, module in MODULES.items():
+    for stem, module in MODULES:
         day = int(stem[-2:])
         if days and day not in days:
             continue

@@ -56,7 +56,7 @@ if __name__ == "__main__":
 
 from aocd import submit
 
-import utils
+from . import utils
 
 
 def parse(data):
@@ -75,7 +75,7 @@ if __name__ == "__main__":
     with open("{inputs_path}", 'r') as fp:
         data = fp.read()
 
-    data =  parse(data)
+    data = parse(data)
 
     print("Running day {args.day} part A")
     start_a = time.perf_counter()

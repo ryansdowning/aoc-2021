@@ -8,7 +8,7 @@ from . import utils
 
 
 def parse(data) -> list[int]:
-    return list(map(int, data.split("\n")))
+    return pd.Series(list(map(int, data.split("\n"))))
 
 
 def solve_numpy(data, window=1):
@@ -16,14 +16,14 @@ def solve_numpy(data, window=1):
     return (data[window:] > data[:-window]).sum()
 
 
-def solve_pandas(data, window=1):
+def solve(data, window=1):
     # cast list to pd.Series in parse function if using
-    return (data > data.shift(window)).sum()
+    return (data.values[window:] > data.values[:-window]).sum()
 
 
 # O(n) time, no extra space
-def solve(data, window=1):
-    return sum(curr > prev for prev, curr in zip(data, data[window:]))
+# def solve(data, window=1):
+#     return sum(curr > prev for prev, curr in zip(data, data[window:]))
 
 
 # O(n) time, no extra space
