@@ -11,45 +11,67 @@ class Board:
         self.board = {(row, col): val for row, lst in enumerate(board) for col, val in enumerate(lst)}
         self.iboard = {val: pos for pos, val in self.board.items()}
         self.called = {pos: False for pos in self.board}
+        self.win_counts = {'rows': [0 for _ in range(self.n)], 'cols': [0 for _ in range(self.m)], 'diags': [0, 0]}
         self.winning = False
 
     def call_val(self, val: int):
+        # Original solution:
+        # if val in self.board:
+        #     self.called[pos] = True
         if val in self.iboard:
-            self.called[self.iboard[val]] = True
+            pos = self.iboard[val]
+            if not self.called[pos]:
+                self.win_counts['rows'][pos[0]] += 1
+                self.win_counts['cols'][pos[1]] += 1
+                if pos[0] == pos[1]:
+                    self.win_counts['diags'][0] += 1
+                if pos[0] + pos[1] == self.n - 1:
+                    self.win_counts['diags'][1] += 1
+                self.called[pos] = True
+                self.winning = self.winning or any(
+                    count == self.n
+                    for count in [
+                        self.win_counts['rows'][pos[0]], self.win_counts['cols'][pos[1]]
+                    ] + self.win_counts['diags']
+                )
 
     def remaining_sum(self):
         return sum(self.board[pos] for pos, is_called in self.called.items() if not is_called)
 
     def check_win(self):
-        if self.winning:
-            return True
-
-        def check_direction(start, direction):
-            if not self.called[start]:
-                return False
-            x, y = start
-            h, v = direction
-
-            while -1 < x < self.n and -1 < y < self.m:
-                if not self.called[(x, y)]:
-                    return False
-                x += h
-                y += v
-            return True
-
-        DIRS = {
-            (0, 1): [(i, 0) for i in range(self.n)],
-            (1, 1): [(0, 0)],
-            (1, 0): [(0, i) for i in range(self.m)],
-            (1, -1): [(0, self.m-1)]
-        }
-
-        for dir_, starts in DIRS.items():
-            for start in starts:
-                if check_direction(start, dir_):
-                    self.winning = True
-                    return True
-        return False
+        return self.winning
+        # Original solution below, does not involve the additional logic in check_val; naively checks each direction.
+        # The current solution tracks the number of bingo spots called for each possible win condition, if the count
+        # equals the size of the board, that win condition has been met.
+        # if self.winning:
+        #     return True
+        #
+        # def check_direction(start, direction):
+        #     if not self.called[start]:
+        #         return False
+        #     x, y = start
+        #     h, v = direction
+        #
+        #     while -1 < x < self.n and -1 < y < self.m:
+        #         if not self.called[(x, y)]:
+        #             return False
+        #         x += h
+        #         y += v
+        #     return True
+        #
+        # DIRS = {
+        #     (0, 1): [(i, 0) for i in range(self.n)],
+        #     (1, 1): [(0, 0)],
+        #     (1, 0): [(0, i) for i in range(self.m)],
+        #     (1, -1): [(0, self.m-1)]
+        # }
+        #
+        # for dir_, starts in DIRS.items():
+        #     for start in starts:
+        #         if check_direction(start, dir_):
+        #             self.winning = True
+        #             return True
+        # return False
 
 
 def parse(data):
