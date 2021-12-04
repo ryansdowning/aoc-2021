@@ -1,4 +1,5 @@
 import math
+from copy import deepcopy
 from statistics import quantiles, stdev
 from time import perf_counter
 from typing import Any, Callable
@@ -16,11 +17,13 @@ def format_time(seconds: float) -> str:
     return str(seconds)
 
 
-def timeit(func: Callable[[], Any], max_time=15) -> tuple[float, list[float], Any]:
+def timeit(func: Callable[[...], Any], *args, max_time=15, **kwargs) -> tuple[float, list[float], Any]:
     runs = []
 
+    args_copy = deepcopy(args)
+    kwargs_copy = deepcopy(kwargs)
     start = perf_counter()
-    result = func()
+    result = func(*args_copy, **kwargs_copy)
     end = perf_counter()
 
     total_elapsed = end - start
@@ -30,8 +33,10 @@ def timeit(func: Callable[[], Any], max_time=15) -> tuple[float, list[float], An
     est_runs = 10 ** (math.floor(math.log10(est_runs))) - 1
 
     for _ in range(est_runs):
+        args_copy = deepcopy(args)
+        kwargs_copy = deepcopy(kwargs)
         start = perf_counter()
-        func()
+        func(*args_copy, **kwargs_copy)
         end = perf_counter()
         elapsed = end - start
 

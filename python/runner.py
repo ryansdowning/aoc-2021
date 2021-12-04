@@ -10,6 +10,7 @@ from solutions import utils
 parser = argparse.ArgumentParser()
 parser.add_argument("--days", "-d", type=int, nargs="*")
 parser.add_argument("--verbose", "-v", action="count", default=1)
+parser.add_argument("--max-time", "-m", type=int, default=15)
 
 YEAR = 2021
 PKG_NAME = "solutions"
@@ -35,20 +36,17 @@ if __name__ == "__main__":
         print(f"Running day {day}")
 
         with open(INPUTS_PATH / f"{stem}.txt", "r") as fp:
-            time, runs, data = utils.timeit(fp.read)
+            time, runs, data = utils.timeit(fp.read, max_time=args.max_time)
         print(utils.format_results("Reading", time, runs, verbose=verbose))
 
-        parse = partial(module.parse, data)
-        time, runs, data = utils.timeit(parse)
+        time, runs, data = utils.timeit(module.parse, data=data, max_time=args.max_time)
         n = len(runs)
         print(utils.format_results("Parsing", time, runs, verbose=verbose))
 
-        part_a = partial(module.part_a, data)
-        time, runs, solution_a = utils.timeit(part_a)
+        time, runs, solution_a = utils.timeit(module.part_a, data=data, max_time=args.max_time)
         print(utils.format_results("Part A", time, runs, solution_a, verbose=verbose))
 
-        part_b = partial(module.part_b, data)
-        time, runs, solution_b = utils.timeit(part_b)
+        time, runs, solution_b = utils.timeit(module.part_b, data=data, max_time=args.max_time)
         print(utils.format_results("Part B", time, runs, solution_b, verbose=verbose))
 
         print()
