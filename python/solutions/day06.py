@@ -12,17 +12,17 @@ def parse(data):
 
 def solve(data, days):
     count = Counter(data)
-    count[8] = 0
-    count[7] = 0
+    count = [0] + [count[v] for v in range(1, 7)] + [0, 0]
+    n = [0] * len(count)
     for _ in range(days):
-        new_count = {}
+        new_count = n.copy()
         for i in range(8, 0, -1):
             new_count[i-1] = count[i]
         zeros = count[0]
         new_count[8] = zeros
         new_count[6] = new_count[6] + zeros
         count = new_count
-    return sum(v for v in count.values())
+    return sum(count)
 
 
 def part_a(data):
