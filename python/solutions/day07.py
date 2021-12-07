@@ -1,4 +1,5 @@
 from functools import cache
+import statistics
 import time
 
 from aocd import submit
@@ -16,6 +17,11 @@ def get_fuel_cost(steps):
 
 
 def part_a(data):
+    median = int(statistics.median(data))
+    return sum(abs(num - median) for num in data)
+
+
+def _part_a(data):
     x = min(data)
     y = max(data)
     m = float('inf')
@@ -29,6 +35,11 @@ def part_a(data):
 
 
 def part_b(data):
+    mean = sum(data) // len(data)
+    return int(sum(get_fuel_cost(abs(num - mean)) for num in data))
+
+
+def _part_b(data):
     x = min(data)
     y = max(data)
     m = float('inf')
