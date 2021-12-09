@@ -1,5 +1,6 @@
 import time
 from collections import defaultdict
+from functools import reduce
 
 from aocd import submit
 
@@ -12,7 +13,7 @@ MAP = [
 ]
 # NUM_MAP = {s: n for n, s in enumerate(MAP)}
 LENS = [len(i) for i in MAP]
-LENS_MAP = {len_: i for i, len_ in enumerate(LENS)}
+LENS_MAP = {len_: str(i) for i, len_ in enumerate(LENS)}
 
 
 def parse(data):
@@ -32,37 +33,42 @@ def part_a(data):
     return total
 
 
+def resolve(output, segments):
+    n = len(output)
+    if n == 6:
+        if len(set(output).union(segments[4])) == 6:
+            return "9"
+        elif len(set(output).intersection(segments[1])) == 2:
+            return "0"
+        return "6"
+    if n == 5:
+        if len(set(digit).union(segments[1])) == n:
+            return "3"
+        elif len(set(digit).union(segments[4])) == 7:
+            return "2"
+        return "5"
+    return LENS_MAP[n]
+
+
 def part_b(data):
     total = 0
     for segments, outputs in data:
-        wires = [set("abcdefg")] * 7
+        wires = defaultdict(list)
         for segment in segments:
-            n = len(segment)
-            if n == 2:
-                wires[2] &= segment
-                wires[5] &= segment
-            elif n == 3:
-                wires[0] &= segment
-                wires[2] &= segment
-                wires[5] &= segment
-            elif n == 4:
-                wires[1] &= segment
-                wires[2] &= segment
-                wires[3] &= segment
-                wires[5] &= segment
+            wires[len(segment)].append(segment)
 
-        wire_map = {}
-        for i, c in enumerate("abcdefg"):
-            if len(wires[i]) == 1:
-                wire_map[c] = wires[i].pop()
-            else:
-                print(c,  wires[i])
-                raise Exception("Could not resolve wires")
+        (one,) = wires[2]
+        (seven,) = wires[3]
+        (four,) = wires[4]
+        (*three_five, two) = sorted(wires[5], key=(one | four).__rsub__)
+        (three, five) = sorted(three_five, key=two.__rsub__)
+        (*zero_nine, six) = sorted(wires[6], key=one.__sub__)
+        (nine, zero) = sorted(zero_nine, key=three.__rsub__)
+        (eight,) = wires[7]
 
-        for output in outputs:
-            mapped_output = set(wire_map[c] for c in output)
-            total += MAP.index(mapped_output) + 1
-
+        wire_map = (zero, one, two, three, four, five, six, seven, eight, nine)
+        resolved = [wire_map.index(output) for output in outputs]
+        total += reduce(lambda acc, num: 10 * acc + num, resolved)
     return total
 
 
