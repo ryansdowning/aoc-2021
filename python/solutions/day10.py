@@ -27,10 +27,6 @@ def part_a(data):
     return total
         
 
-
-
-
-
 def part_b(data):
     val_map = {")": 1, "]": 2, "}": 3, ">": 4}
     scores = []
