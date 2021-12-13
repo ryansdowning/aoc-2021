@@ -1,4 +1,5 @@
 import argparse
+import datetime
 import pathlib
 
 from aocd import get_data
@@ -19,8 +20,8 @@ def str_to_file(path: str) -> pathlib.Path:
 
 
 parser = argparse.ArgumentParser()
-parser.add_argument("--year", "-y", type=int, help="year of the advent-of-code challenge", required=True)
-parser.add_argument("--day", "-d", type=int, help="day of the advent-of-code challenge", required=True)
+parser.add_argument("--year", "-y", type=int, help="year of the advent-of-code challenge", default=datetime.datetime.now().year)
+parser.add_argument("--day", "-d", type=int, help="day of the advent-of-code challenge", default=datetime.datetime.now().day)
 parser.add_argument(
     "--inputs-path",
     "-i",
@@ -32,14 +33,14 @@ parser.add_argument(
     "--solution-path",
     "-s",
     type=str_to_file,
-    help="Path of file to create for the challenge's solution. If not provided, day_<day>.py will be used as default.",
+    help="Path of file to create for the challenge's solution. If not provided, solutions/day_<day>.py will be used as default.",
 )
 
 if __name__ == "__main__":
     args = parser.parse_args()
 
     if not args.solution_path:
-        default_solution_path = pathlib.Path(f"day{args.day:02d}.py")
+        default_solution_path = pathlib.Path(f"solutions/day{args.day:02d}.py")
         if default_solution_path.exists():
             raise FileExistsError(
                 f"Solution path was not provided and the default path ({default_solution_path}) already exists"
@@ -53,6 +54,7 @@ if __name__ == "__main__":
         fp.write(data)
 
     solution_template = f"""import time
+from copy import deepcopy
 
 from aocd import submit
 
@@ -77,6 +79,7 @@ if __name__ == "__main__":
 
     data = parse(data)
 
+    data_a = deepcopy(data)
     print("Running day {args.day} part A")
     start_a = time.perf_counter()
 

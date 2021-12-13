@@ -1,8 +1,7 @@
 import time
+from copy import deepcopy
 
 from aocd import submit
-from functools import reduce
-from itertools import product, count
 
 from . import utils
 
@@ -43,7 +42,7 @@ def part_a(data):
 def part_b(data):
     n, m = len(data), len(data[0])
     t = n * m
-    step = 0
+    step = 1
     while True:
         flashed = []
         flashes = 0
@@ -80,9 +79,10 @@ if __name__ == "__main__":
     data = parse(data)
 
     print("Running day 11 part A")
+    data_a = deepcopy(data)
     start_a = time.perf_counter()
 
-    solution_a = part_a(data)
+    solution_a = part_a(data_a)
 
     stop_a = time.perf_counter()
     elapsed_a = stop_a - start_a

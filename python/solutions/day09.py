@@ -1,4 +1,5 @@
 import time
+
 from functools import reduce
 
 from aocd import submit
@@ -45,7 +46,6 @@ def part_b(data):
         for j, val in enumerate(row):
             basins.append(basin_size(i, j))
 
-    # print(basins)
     return reduce(lambda acc, num: acc * num, sorted(basins)[-3:], 1)
 
 
