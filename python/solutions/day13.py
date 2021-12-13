@@ -19,14 +19,14 @@ def parse(data):
 
 def fold_left(grid, val):
     ylen = len(grid)
-    xlen = len(grid[0]) - 1
-    return [[max(grid[y][x], grid[y][xlen-x]) for x in range(val)] for y in range(ylen)]
+    xlen = val * 2
+    return [[grid[y][x] or grid[y][xlen-x] for x in range(val)] for y in range(ylen)]
 
 
 def fold_up(grid, val):
-    ylen = len(grid) - 1
+    ylen = val * 2
     xlen = len(grid[0])
-    return [[max(grid[y][x], grid[ylen-y][x]) for x in range(xlen)] for y in range(val)]
+    return [[grid[y][x] or grid[ylen-y][x] for x in range(xlen)] for y in range(val)]
 
 
 def part_a(data):
