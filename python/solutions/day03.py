@@ -22,42 +22,15 @@ def part_a(data):
 
 
 def _part_b(data):
-    data_t = list(zip(*data))
-    counts = list(map(Counter,  data_t))
-
-    counts_most = counts.copy()
-    counts_least = counts.copy()
     data_most = data.copy()
     data_least = data.copy()
     m = l = len(data)
-    n = len(data[0])
-    i = 0
-    while m > 1 or l > 1:
-        if m > 1:
-            m_val = int(counts_most[i][1] >= counts_most[i][0])
-            new_most = []
-            for data_m in data_most:
-                if data_m[i] == m_val:
-                    new_most.append(data_m)
-                else:
-                    counts_most[i+1][data_m[i+1]] -= 1
-            data_most = new_most
-        if l > 1:
-            l_val = int(counts_least[i][1] < counts_least[i][0])
-            new_least = []
-            for data_l in data_least:
-                if data_l[i] == l_val:
-                    new_least.append(data_l)
-                else:
-                    counts_least[i+1][data_l[i+1]] -= 1
-            data_least = new_least
-        i += 1
-        m = len(data_most)
-        l = len(data_least)
 
-    oxygen = int(''.join(str(a) for a in data_most[0]), base=2)
-    co = int(''.join(str(a) for a in data_least[0]), base=2)
-    return oxygen * co
+    i = 0
+    while m > 1 and l > 1:
+        mcount = 0
+        for b in data_most:
+            mcount += b % 2
 
 
 def part_b(data):
